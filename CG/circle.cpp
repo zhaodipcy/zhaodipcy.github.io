@@ -10,60 +10,59 @@ int main()
 {
 	HWND hWnd = GetConsoleWindow();
 	HDC hDC = GetWindowDC(hWnd);
-	
-	void draw_line(int x0, int y0, int x1, int y1);
-	int x0, x1,y0,y1;
-	float k;
-	cout << "Enter the x0,y0: " << endl;
+	int x0, y0,r;
+	cout << "Enter the center of the circle:" << endl;
 	cin >> x0 >> y0;
-	cout << "Enter the x1,y1: " << endl;
-	cin >> x1 >> y1;
-    k = (y1 - y0) / (float)(x1 - x0);
-	cout << "k=" << k<<endl;
-	if (k >= 1){
-		cout << "k>1" << endl;
-		int y, x = x0;
-		int dx = 2 * (x1 - x0), dy = 2 * (y1 - y0);
-		int dydx = dx - dy, F = dx - dy / 2;
-		for (y = y0; y < y1; y++){
-			SetPixel(hDC, x, y, RGB(255, 255, 255));
-			if (F < 0)F += dx;
-			else{ x++; F += dydx; }
+	cout << "Enter the radius of the circle:" << endl;
+	cin >> r;
+	int x, y, color = RGB(255,255,255);
+	x = 0, y =r;
+	int d = 1 - r;
+	while (y > x){
+		if (d < 0){
+			d += 2 * x + 3;
 		}
-	}
-	else if (k >= 0){
-		cout << "0<=k<=1" << endl;
-		int x, y = y0;
-		int dx = 2 * (x1 - x0), dy = 2 * (y1 - y0);
-		int dydx = dy - dx, F = dy - dx / 2;
-		for (x = x0; x < x1; x++){
-			SetPixel(hDC, x, y, RGB(255, 255, 255));
-			if (F < 0)F += dy;
-			else{ y++; F += dydx; }
+		else{
+			d += 2 * (x - y) + 5;
+			y--;
 		}
+		x++;
+		SetPixel(hDC, x + x0, y + y0, color);
+		SetPixel(hDC, -x + x0, y + y0, color);
+		SetPixel(hDC, -x + x0, -y + y0, color);
+		SetPixel(hDC, x + x0, -y + y0, color);
+		SetPixel(hDC, y + x0, x + y0, color);
+		SetPixel(hDC, -y + x0, x + y0, color);
+		SetPixel(hDC, -y + x0, -x + y0, color);
+		SetPixel(hDC, y + x0, -x + y0, color);
 	}
-	else if (k > -1){
-		cout << "-1.0<=k<=0" << endl;
-		int x, y = y0;
-		int dx = 2 * (x1 - x0), dy = 2 * (y1 - y0);
-		int dydx = dy + dx, F = dy + dx / 2;
-		for (x = x0; x < x1; x++){
-			SetPixel(hDC, x, y, RGB(255, 255, 255));
-			if (F > 0)F += dy;
-			else{ y--; F += dydx; }
+
+	/*float e, d;
+	e = 3 - 2 * r; 
+	x = 0; 
+	y = r;
+	while (x <= y)
+	{
+		if (e < 0)
+		{
+			e = e + 4 * x + 6;
+			x++;
 		}
-	}
-	else{
-		cout << "k<-1" << endl;
-		int y, x = x0;
-		int dx = 2 * (x1 - x0), dy = 2 * (y1 - y0);
-		int dydx = dy + dx, F = dx + dy / 2;
-		for (y = y0; y > y1; y--){
-			SetPixel(hDC, x, y, RGB(255, 255, 255));
-			if (F > 0)F -= dx;
-			else{ x++; F -= dydx; }
+		else
+		{
+			e = e + 4 * (x - y) + 10;
+			x++;
+			y--;
 		}
-	}
+		SetPixel(hDC, x + x0, y + y0, color);
+		SetPixel(hDC, -x + x0, y + y0, color);
+		SetPixel(hDC, -x + x0, -y + y0, color);
+		SetPixel(hDC, x + x0, -y + y0, color);
+		SetPixel(hDC, y + x0, x + y0, color);
+		SetPixel(hDC, -y + x0, x + y0, color);
+		SetPixel(hDC, -y + x0, -x + y0, color);
+		SetPixel(hDC, y + x0, -x + y0, color);
+	}*/
 	ReleaseDC(hWnd, hDC);
 	system("pause");
 	return 0;
